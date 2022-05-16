@@ -1,0 +1,34 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  namespace: argocd
+  name: pe-java-demo
+  annotations:
+    argocd.argoproj.io/manifest-generate-paths: .
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: pe-devops
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: apps/pe-java-demo/
+    repoURL: git@github.com:niels-baltodano/cicd-tools-sunat.git
+    targetRevision: master
+  project: "cicd-tools-peru"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  ignoreDifferences:
+  - group: networking.k8s.io
+    kind: Ingress
+    jsonPointers:
+      - /spec/rules/0/host
+      - /spec/tls/0/hosts/0
+  - group: cert-manager.io
+    kind: Certificate
+    jsonPointers:
+      - /spec/commonName
+      - /spec/dnsNames/0
