@@ -17,8 +17,6 @@ spec:
       containers:
       - image: niels58/java-demo:pe-master-31
         name: java-demo
-      - image: niels58/java-demo:pe-master-30
-        name: spring-boot
         ports:
         - containerPort: 8080
         resources:
